@@ -30,5 +30,18 @@ pipeline {
                 sh 'docker push $DOCKER_IMAGE'
             }
         }
+
+        // ⭐ NEW STAGE — ADD THIS
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                docker stop myapp-container || true
+                docker rm myapp-container || true
+                docker pull sanjeeva001/myapp:v1
+                docker run -d -p 3000:3000 --name myapp-container sanjeeva001/myapp:v1
+                '''
+            }
+        }
+
     }
 }
